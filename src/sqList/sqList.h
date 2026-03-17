@@ -194,4 +194,79 @@ public:
 private:
     std::vector<int> data;
 };
+
+int findMid(sqList &L1, sqList &L2)
+{
+    // 找到中位数的位置，下标以0为标准
+    int tar = ((L1.getLen() + L2.getLen()) % 2 == 0) ? (L1.getLen() + L2.getLen()) / 2 - 1 : (L1.getLen() + L2.getLen()) / 2;
+    // 我们不开另一个sqlist，直接找数
+    int i = 0, j = 0;
+    int curInd = 0; // 遍历的指针下标
+    int res = 0;    // 结果随时更新
+
+        while (curInd <= tar)
+    {
+        if (i < L1.getLen() && (j >= L2.getLen() || L1.getData()[i] <= L2.getData()[j]))
+        {
+            res = L1.getData()[i];
+            i++;
+        }
+        else
+        {
+            res = L2.getData()[j];
+            j++;
+        }
+        curInd++;
+    }
+    return res;
+    // 双层嵌套有点容易死，因为临近点跳两个很容易出错，那就不要处理那个跳两个了，一个一个拿
+    // 受到了之前合并排序表和删除重复元素的影响，必须找完其中一个才能走出来，其实完全错误了
+
+    /*  while (curInd < tar)
+     {
+         // while (true)     不要这样写嵌套，不然会在仅仅最近这一两句反复横跳
+         while (!(i == L1.getLen() || j == L2.getLen()))
+         {
+             if (L1.getData()[i] < L2.getData()[j])
+             {
+                 res = L1.getData()[i];
+                 curInd++;
+                 i++;
+             }
+
+             else if (L1.getData()[i] == L2.getData()[j])
+             {
+                 // curInd += 2;风险很大可能会直接跳过去
+                 if (curInd + 2 > tar)
+                 {
+                     return res;
+                 }
+                 curInd += 2;
+                 res = L1.getData()[i];
+                 i++;
+                 j++;
+             }
+
+             else
+             {
+                 res = L2.getData()[j];
+                 curInd++;
+                 j++;
+             }
+         }
+         if (i < L1.getLen())
+         {
+             res = L1.getData()[i];
+             curInd++;
+             i++;
+         }
+         else if (j < L2.getLen())
+         {
+             res = L2.getData()[j];
+             curInd++;
+             j++;
+         }
+     }
+     return res; */
+}
 #endif

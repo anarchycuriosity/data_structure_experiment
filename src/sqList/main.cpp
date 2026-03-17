@@ -68,4 +68,7 @@ int main()
         std::cout
             << std::endl;
     }
+
+    sqList tmp1({1, 3}), tmp2({2, 3});
+    std::cout << findMid(tmp1, tmp2);
 }
