@@ -103,6 +103,11 @@ int main()
         res_u = res_u.together(L1, L2);
         std::cout << "并集结果: ";
         res_u.print();
+
+        std::cout << "测试自操作a = a op b" << std::endl;
+        L1 = L1.together(L1, L2);
+        std::cout << "并集结果: ";
+        res_u.print();
     }
 
     // 测试交集
@@ -124,6 +129,13 @@ int main()
         res_p = res_p.findPub(L1, L2);
         std::cout << "交集结果: ";
         res_p.print();
+
+        std::cout << "测试自操作结果a = a op b" << std::endl;
+        {
+            L1 = L1.findPub(L1, L2);
+            std::cout << "交集结果: ";
+            L1.print();
+        }
     }
 
     // 测试差集
@@ -150,6 +162,17 @@ int main()
         else
         {
             std::cout << "计算差集失败 " << std::endl;
+        }
+
+        std::cout << "测试自操作a = a op b" << std::endl;
+        if (L1.minus(L1, L2, L1) == success)
+        {
+            std::cout << "结果: ";
+            L1.print();
+        }
+        else
+        {
+            std::cout << "计算失败 " << std::endl;
         }
     }
 

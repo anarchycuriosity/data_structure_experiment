@@ -26,6 +26,14 @@ public:
     {
         return data.size();
     }
+    sqList &operator=(const sqList &other)
+    {
+        if (this != &other) // 防止自己赋值，直接复制
+        {
+            this->data = other.data;
+        }
+        return *this;
+    }
     void insertVal(int val) // 按值插入，保持原递增有序
     {
         data.push_back(0);
@@ -176,9 +184,11 @@ public:
     }
 
     // 求并集
-    sqList together(sqList &a, sqList &b)
+    sqList together(sqList &A, sqList &B)
     {
         sqList toge;
+        sqList a = A;
+        sqList b = B;
         int i = 0, j = 0;
         while (i < a.getLen() && j < b.getLen())
         {
@@ -212,8 +222,10 @@ public:
         return toge;
     }
     // 求交集的部分在getpub里面已经实现了
-    ErrorCode minus(sqList &a, sqList &b, sqList &minus) // a - b那肯定a比b大
+    ErrorCode minus(sqList &A, sqList &B, sqList &minus) // a - b那肯定a比b大
     {
+        sqList a = A;
+        sqList b = B;
         if (a.getLen() < b.getLen())
         {
             return rangeError;
