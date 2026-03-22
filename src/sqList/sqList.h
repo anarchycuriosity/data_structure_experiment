@@ -2,6 +2,13 @@
 #define SQLIST_H
 #include <vector>
 #include <iostream>
+enum ErrorCode
+{
+    success,
+    overflow,
+    underflow,
+    rangeError
+};
 class sqList
 {
 public:
@@ -114,43 +121,8 @@ public:
         }
         return res;
     }
-    sqList mergeList(sqList &L1, sqList &L2) // 递增特点，考虑双指针而不是暴力检索，同时不需要使用set
-    {                                        // 由于需要从两个表里面选元素插入，所以利用前面的insert似乎不是那么合适
-        sqList res;                          // 求交集
-        std::vector<int> &v1 = L1.data;      // 弄个引用不然拷贝太多
-        std::vector<int> &v2 = L2.data;
-        if (v1.size() == 0 || v2.size() == 0)
-        {
-            return res;
-        }
-        int i = 0, j = 0;
-        while (true)
-        {
-            if (i == v1.size() || j == v2.size())
-            {
-                break;
-            }
-            if (v1[i] == v2[j])
-            {
-                res.push(v1[i]);
-                i++;
-                j++;
-            }
-            else if (v1[i] < v2[j])
-            {
-                res.push(v1[i]);
-                i++;
-            }
-            else
-            {
-                res.push(v2[j]);
-                j++;
-            }
-        }
-        return res;
-    }
 
-    int removed(sqList &L) // 由于是在有序的顺序表中删除，所以其实没这么复杂
+    ErrorCode removed(sqList &L, int &times) // 由于是在有序的顺序表中删除，所以其实没这么复杂
     {
         /*
         int count = 0; // 不太懂我这种方法应该怎么算
@@ -169,7 +141,10 @@ public:
         L.data = res;
         */
         // 采用快慢指针
-        int ind;
+        if (L.data.size() == 0)
+        {
+            return rangeError;
+        }
         int fast = 1, slow = 0;
         for (; fast < L.data.size(); fast++)
         {
@@ -179,24 +154,38 @@ public:
                 L.data[slow] = L.data[fast];
             }
         }
-        return slow;
+        times = slow;
+        return success;
     }
 
-    void cutPrint(int start, int end) // end也会被打印，从0开始
+    ErrorCode cutPrint(int start, int end) // end也会被打印，从0开始
     {
+        if (end > data.size() - 1 || start < 0)
+        {
+            return overflow;
+        }
+        else if (start > end)
+        {
+            return rangeError;
+        }
         for (int i = start; i <= end; i++)
         {
             std::cout << data[i] << " ";
         }
         std::cout << std::endl;
+        return success;
     }
 
 private:
     std::vector<int> data;
 };
 
-int findMid(sqList &L1, sqList &L2)
+ErrorCode findMid(sqList &L1, sqList &L2, int &mid)
 {
+    if (L1.getData().empty() && L2.getData().empty())
+    {
+        return rangeError;
+    }
     // 找到中位数的位置，下标以0为标准
     int tar = ((L1.getLen() + L2.getLen()) % 2 == 0) ? (L1.getLen() + L2.getLen()) / 2 - 1 : (L1.getLen() + L2.getLen()) / 2;
     // 我们不开另一个sqlist，直接找数
@@ -204,7 +193,7 @@ int findMid(sqList &L1, sqList &L2)
     int curInd = 0; // 遍历的指针下标
     int res = 0;    // 结果随时更新
 
-        while (curInd <= tar)
+    while (curInd <= tar)
     {
         if (i < L1.getLen() && (j >= L2.getLen() || L1.getData()[i] <= L2.getData()[j]))
         {
@@ -218,7 +207,8 @@ int findMid(sqList &L1, sqList &L2)
         }
         curInd++;
     }
-    return res;
+    mid = res;
+    return success;
     // 双层嵌套有点容易死，因为临近点跳两个很容易出错，那就不要处理那个跳两个了，一个一个拿
     // 受到了之前合并排序表和删除重复元素的影响，必须找完其中一个才能走出来，其实完全错误了
 

@@ -61,14 +61,50 @@ int main()
     {
         sqList list4(testVec3s[i]);
         list4.print();
-        int count = list4.removed(list4);
-        std::cout << count << std::endl;
-        // list4.cutPrint(0, list4.removed(list4));这会调用多次removed函数
-        list4.cutPrint(0, count);
-        std::cout
-            << std::endl;
+        int count = 0;
+        list4.removed(list4, count);
+        if (list4.removed(list4, count) == success)
+        {
+            std::cout << "success" << " " << count << std::endl;
+            // list4.cutPrint(0, list4.removed(list4));这会调用多次removed函数
+            if (list4.cutPrint(0, count) == success)
+            {
+                list4.cutPrint(0, count);
+            }
+            else
+            {
+                std::cout << "overflow，不打印" << std::endl;
+            }
+        }
+        else
+        {
+            std::cout << "rangeError" << std::endl;
+        }
+    }
+
+    std::cout << "现在测试求中位数,展示原表和中位数" << std::endl;
+    sqList tmp0, tmp00;
+    int mid = 0;
+    if (findMid(tmp0, tmp00, mid) == success)
+    {
+        tmp0.print();
+        tmp00.print();
+        std::cout << mid;
+    }
+    else
+    {
+        std::cout << "underflow，不展示任何" << std::endl;
     }
 
     sqList tmp1({1, 3}), tmp2({2, 3});
-    std::cout << findMid(tmp1, tmp2);
+    if (findMid(tmp1, tmp2, mid) == success)
+    {
+        tmp1.print();
+        tmp2.print();
+        std::cout << mid;
+    }
+    else
+    {
+        std::cout << "underflow,不展示任何" << std::endl;
+    };
 }
