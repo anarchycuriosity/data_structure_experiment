@@ -108,7 +108,6 @@ public:
                 res.push(v1[i]);
                 i++;
                 j++;
-                break;
             }
             else if (v1[i] < v2[j])
             {
@@ -173,6 +172,77 @@ public:
             std::cout << data[i] << " ";
         }
         std::cout << std::endl;
+        return success;
+    }
+
+    // 求并集
+    sqList together(sqList &a, sqList &b)
+    {
+        sqList toge;
+        int i = 0, j = 0;
+        while (i < a.getLen() && j < b.getLen())
+        {
+            if (a.data[i] < b.data[j])
+            {
+                toge.push(a.data[i]);
+                i++;
+            }
+            else if (a.data[i] == b.data[j])
+            {
+                toge.push(a.data[i]);
+                i++;
+                j++;
+            }
+            else
+            {
+                toge.push(b.data[j]);
+                j++;
+            }
+        }
+        while (i < a.getLen())
+        {
+            toge.push(a.data[i]);
+            i++;
+        }
+        while (j < b.getLen())
+        {
+            toge.push(b.data[j]);
+            j++;
+        }
+        return toge;
+    }
+    // 求交集的部分在getpub里面已经实现了
+    ErrorCode minus(sqList &a, sqList &b, sqList &minus) // a - b那肯定a比b大
+    {
+        if (a.getLen() < b.getLen())
+        {
+            return rangeError;
+        }
+        int i = 0, j = 0;
+        while (i < a.getLen() && j < b.getLen())
+        {
+            if (a.data[i] < b.data[j])
+            {
+                minus.push(a.data[i]); // 没匹配到就push进去，匹配到了就跳过不push
+                i++;
+            }
+            else if (a.data[i] == b.data[j])
+            {
+                i++;
+                j++;
+            }
+            else
+            {
+                j++;
+            }
+        }
+        if (i < a.getLen()) // 如果a还有剩，肯定不会再被减掉了，直接全部塞回去
+        {
+            for (; i < a.getLen(); i++)
+            {
+                minus.push(a.data[i]);
+            }
+        }
         return success;
     }
 
@@ -259,4 +329,5 @@ ErrorCode findMid(sqList &L1, sqList &L2, int &mid)
      }
      return res; */
 }
+
 #endif

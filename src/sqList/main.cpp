@@ -59,6 +59,7 @@ int main()
 
     for (int i = 0; i < 3; i++)
     {
+        std::cout << std::endl;
         sqList list4(testVec3s[i]);
         list4.print();
         int count = 0;
@@ -69,7 +70,8 @@ int main()
             // list4.cutPrint(0, list4.removed(list4));这会调用多次removed函数
             if (list4.cutPrint(0, count) == success)
             {
-                list4.cutPrint(0, count);
+                // if已经执行，所以不能再写否则打印2次
+                //  list4.cutPrint(0, count);
             }
             else
             {
@@ -79,6 +81,75 @@ int main()
         else
         {
             std::cout << "rangeError" << std::endl;
+        }
+    }
+
+    // 测试并集
+    std::cout << std::endl
+              << std::endl;
+    std::cout << "现在测试并集, 每次将下面两行顺序表合并" << std::endl;
+    std::vector<std::vector<int>> union_vec1 = {{1, 3, 6, 10, 15}, {1, 3, 6}, {}};
+    std::vector<std::vector<int>> union_vec2 = {{1, 2, 3, 4, 5, 6}, {2, 4, 5}, {1, 2, 3}};
+
+    for (int i = 0; i < 3; i++)
+    {
+        std::cout << "第" << i + 1 << "组" << std::endl;
+        sqList L1(union_vec1[i]);
+        sqList L2(union_vec2[i]);
+        L1.print();
+        L2.print();
+
+        sqList res_u;
+        res_u = res_u.together(L1, L2);
+        std::cout << "并集结果: ";
+        res_u.print();
+    }
+
+    // 测试交集
+    std::cout << std::endl
+              << std::endl;
+    std::cout << "现在测试交集, 寻找两行顺序表的公共元素" << std::endl; // 如果是0就打印空，所以不用errorcode
+    std::vector<std::vector<int>> pub_vec1 = {{1, 3, 6, 10, 15}, {1, 2, 3}, {10, 20}};
+    std::vector<std::vector<int>> pub_vec2 = {{3, 6, 11, 15}, {4, 5, 6}, {10, 20}};
+
+    for (int i = 0; i < 3; i++)
+    {
+        std::cout << "第" << i + 1 << "组" << std::endl;
+        sqList L1(pub_vec1[i]);
+        sqList L2(pub_vec2[i]);
+        L1.print();
+        L2.print();
+
+        sqList res_p;
+        res_p = res_p.findPub(L1, L2);
+        std::cout << "交集结果: ";
+        res_p.print();
+    }
+
+    // 测试差集
+    std::cout << std::endl
+              << std::endl;
+    std::cout << "现在测试差集，计算 L1 - L2 的结果" << std::endl;
+    std::vector<std::vector<int>> minus_vec1 = {{1, 2, 3, 4, 5, 6}, {10, 20, 30}, {1, 3, 5}};
+    std::vector<std::vector<int>> minus_vec2 = {{2, 4, 6}, {5, 10, 15}, {1, 3, 5}};
+
+    for (int i = 0; i < 3; i++)
+    {
+        std::cout << "第" << i + 1 << "组" << std::endl;
+        sqList L1(minus_vec1[i]);
+        sqList L2(minus_vec2[i]);
+        L1.print();
+        L2.print();
+
+        sqList res_m;
+        if (res_m.minus(L1, L2, res_m) == success)
+        {
+            std::cout << "差集结果: ";
+            res_m.print();
+        }
+        else
+        {
+            std::cout << "计算差集失败 " << std::endl;
         }
     }
 
