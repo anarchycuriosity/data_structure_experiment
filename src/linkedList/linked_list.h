@@ -234,14 +234,28 @@ public:
         list_node *cur2 = L2.head;
         while (cur1->next != nullptr && cur2->next != nullptr)
         {
-            if (cur1->data == cur1->next->data)
+            if (cur1 != this->head && cur1->data == cur1->next->data)
             {
-                cur1->next = cur1->next->next;
+                list_node *to_del = cur1->next;
+                cur1->next = to_del->next;
+                delete to_del;
+                continue;
             }
-            else if (cur1->next->data == cur2->next->data)
+
+            if (cur1 != this->head && cur1->data == cur2->next->data)
             {
-                cur1 = cur1->next;
-                cur2 = cur2->next;
+                list_node *to_del = cur2->next;
+                cur2->next = to_del->next;
+                delete to_del;
+                continue;
+            }
+
+            if (cur1->next->data == cur2->next->data)
+            {
+                list_node *to_del = cur2->next;
+                cur2->next = to_del->next;
+                delete to_del;
+                // 不移动L1，这个函数只做一件事情删掉2的重复节点
             }
             else if (cur1->next->data > cur2->next->data)
             {
@@ -250,19 +264,49 @@ public:
                 cur1->next = cur2->next;
                 cur1->next->next = tmp1;
                 cur1 = cur1->next; // cur1跳跃
-                cur2->next = tmp2; // cur2只改next本身不要跳
+                cur2->next = tmp2; // cur2只改next,本身不要跳
             }
-            else
+            else // cur1.next.data < cur2.next.data
             {
                 // 关键是我串小的，但是大的我不一定拿
                 cur1 = cur1->next;
             }
         }
         // 错误1：最后两个while并无法完成合并，因为不需要遍历所以不需要while循环我傻了
-        if (cur2->next != nullptr)
+        // 比较cur1和cur2->next，我脚下的路和要搭的砖
+        // 观察前面的cur2，只有在相等的时候cur2才会移动，cur2本身的值是没有意义的，cur2的next才有
+        // 如果不是为了接尾，其实cur1也不重要，是接尾让他变得重要了，或者说在接尾中它很重要
+        // 不仅仅是去相等还要看是不是递增的！但其实前面已经帮我们做过了，剩下的肯定大，只要不重复即可
+        while (cur2->next != nullptr)
         {
-            cur1->next = cur2->next;
+            if (cur1->data == cur2->next->data)
+            {
+                list_node *to_del = cur2->next; // 2移动，删除前一个节点
+                cur2->next = to_del->next;
+                delete to_del;
+            }
+            else
+            {
+                cur1->next = cur2->next;
+                cur1 = cur1->next;
+                cur2->next = nullptr;
+                break;
+            }
         }
+        while (cur1->next != nullptr)
+        {
+            if (cur1->data == cur1->next->data)
+            {
+                list_node *to_del = cur1->next;
+                cur1->next = cur1->next->next;
+                delete to_del;
+            }
+            else
+            {
+                cur1 = cur1->next;
+            }
+        }
+
         // 多余节点都被放入L2，析构函数会把她删掉的
         // 但是如果你不把提前处理好，野指针会乱跳
         // 必须办理离职手续，在析构之前

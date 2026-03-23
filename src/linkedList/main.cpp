@@ -2,7 +2,7 @@
 
 int main()
 {
-    // --- 第一题：奇偶分解 ---
+
     std::cout << "现在测试第一题, 分解奇偶项" << std::endl;
     std::vector<std::vector<int>> test_vec_1 = {
         {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60},
@@ -24,15 +24,14 @@ int main()
         std::cout << std::endl;
     }
 
-    // --- 第二题：求公共元素 ---
     std::cout << "现在测试第二题, 求两个递增链表的公共元素" << std::endl;
     std::vector<std::vector<int>> pub_l1 = {
         {1, 2, 2, 3, 15, 16, 17, 18, 19, 20},
-        {3, 4, 4, 5, 15, 16, 17, 18, 19, 20},
+        {3, 4, 4, 5, 15, 16, 17, 17, 17, 20},
         {}};
     std::vector<std::vector<int>> pub_l2 = {
         {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 18, 20, 30},
-        {2, 4, 5, 7, 8, 9, 12, 22},
+        {1, 2, 2, 3, 9, 9, 9, 17},
         {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}};
 
     for (int i = 0; i < 3; i++)
@@ -50,7 +49,6 @@ int main()
         std::cout << std::endl;
     }
 
-    // --- 第三题：删除重复元素 ---
     std::cout << "现在测试第三题, 删除递增有序表中的重复元素" << std::endl;
     std::vector<std::vector<int>> dup_vecs = {
         {1, 2, 3, 4, 5, 6, 7, 8, 9},
@@ -68,7 +66,6 @@ int main()
         std::cout << std::endl;
     }
 
-    // --- 第四题：合并集合 ---
     std::cout << "现在测试第四题, 利用原表结点合并集合 (L1 = L1 合并 L2)" << std::endl;
     for (int i = 0; i < 3; i++)
     {
@@ -84,7 +81,6 @@ int main()
         std::cout << std::endl;
     }
 
-    // --- 第五题：查找倒数第K个 ---
     std::cout << "现在测试第五题, 查找倒数第K个结点" << std::endl;
     linkedList L_final({1, 2, 3, 4, 5});
     int k = 2;
