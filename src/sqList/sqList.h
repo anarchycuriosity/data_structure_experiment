@@ -222,14 +222,14 @@ public:
         return toge;
     }
     // 求交集的部分在getpub里面已经实现了
-    ErrorCode minus(sqList &A, sqList &B, sqList &minus) // a - b那肯定a比b大
+    ErrorCode minus(sqList &A, sqList &B, sqList &minus) // a - b那肯定a比b大。其实并不是
     {
         sqList a = A;
-        sqList b = B;
-        if (a.getLen() < b.getLen())
-        {
-            return rangeError;
-        }
+        sqList b = B; // 如果这是多重集
+
+        /*         int times;
+                a.removed(a, times);
+                b.removed(b, times); */
         int i = 0, j = 0;
         while (i < a.getLen() && j < b.getLen())
         {
