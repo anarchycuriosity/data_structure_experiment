@@ -1,6 +1,7 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 // linkedlist只会回收它名下的head地址，地址不管
+
 // 其他new出来的节点需要额外删除
 #include <iostream>
 #include <string>
