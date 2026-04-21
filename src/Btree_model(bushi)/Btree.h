@@ -1,6 +1,8 @@
 #ifndef BTREE_H
 #define BTREE_H
 #include <iostream>
+#include <stdio.h>
+#include <string.h>
 using namespace std;
 typedef char elemenType;
 struct bnode
