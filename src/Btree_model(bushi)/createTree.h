@@ -1,196 +1,255 @@
+#ifndef CREATE_TREE_H
+#define CREATE_TREE_H
+
 #include "Btree.h"
-// 树（森林）的双亲表示定义和算法--------------------------------------------
-#define MAXLEN 100
+#include <iostream>
+#include <cstdio>
+#include <cstring>
 
-typedef char elementType;
-// 树的结点结构
-typedef struct pNode
-{
-	elementType data; // 结点数据域
-	int parent;		  // 父结点指针（下标）
-
-} PTNode;
-
-// 双亲表示的树（森林）结构
-typedef struct pTree
-{
-	PTNode node[MAXLEN]; // 结点数组
-	int n;				 // 结点总数
-} pTree;
+// ==========================================
+// 函数声明部分
+// ==========================================
 
 // 初始化树
-void initialTree(pTree &T)
+void initial_tree(struct p_tree &t);
+
+// 获取祖先结点
+bool get_ancestor(struct p_tree &t, char x);
+
+// 获取子结点
+void get_children(struct p_tree &t, char x);
+
+// 获取第一个孩子下标
+int first_child(struct p_tree &t, int v);
+
+// 获取下一个兄弟下标
+int next_sibling(struct p_tree &t, int v, int w);
+
+// 先序遍历 (递归)
+void pre_order(struct p_tree &t, int v);
+
+// 先序遍历入口
+void pre_traverse(struct p_tree &t);
+
+// 后序遍历 (递归)
+void post_order(struct p_tree &t, int v);
+
+// 后序遍历入口
+void post_traverse(struct p_tree &t);
+
+// 打印树结构
+void print_tree(struct p_tree &t);
+
+// 删除左空格
+void str_l_trim(char *str);
+
+// 从文件创建树 (双亲表示)
+int create_tree_from_file(char file_name[], struct p_tree &t);
+
+// 搜索下一个兄弟
+int next_node(struct p_tree t, int w);
+
+// 递归创建孩子兄弟链表树
+void create_cs_tree_recursive(struct cs_node *&t, struct p_tree &t1, int v);
+
+// 从双亲表示树创建孩子兄弟链表树
+void create_cs_tree(struct cs_node *&t, struct p_tree t1);
+
+// ==========================================
+// 定义部分
+// ==========================================
+
+#define MAX_LEN 100
+
+// 树的结点结构 (双亲表示)
+struct pt_node
 {
-	T.n = 0; // 结点数初始化为0
+	char data;
+	int parent;
+};
+
+// 双亲表示的树结构
+struct p_tree
+{
+	pt_node node[MAX_LEN];
+	int n;
+};
+
+// 树的孩子兄弟链表表示
+struct cs_node
+{
+	char data;
+	cs_node *first_child;
+	cs_node *next_sibling;
+};
+
+void initial_tree(p_tree &t)
+{
+	t.n = 0;
 }
 
-// 求祖先结点
-bool getAncestor(pTree &T, elementType x)
+bool get_ancestor(p_tree &t, char x)
 {
 	int w = 0;
-	elementType y;
-	y = x;
+	char y = x;
 
-	for (w = 0; w < T.n; w++)
+	for (w = 0; w < t.n; w++)
 	{
-		if (T.node[w].data == y)
+		if (t.node[w].data == y)
 		{
-			w = T.node[w].parent; // 取得x的父结点
-			y = T.node[w].data;
-			cout << y << "\t";
+			w = t.node[w].parent;
+			y = t.node[w].data;
+			std::cout << y << "\t";
 			break;
 		}
 	}
-	if (w >= T.n) // x不在树上，返回false
+	if (w >= t.n)
+	{
 		return false;
+	}
 
-	// 搜索x父结点之外的其它祖先结点
 	while (w != -1)
 	{
-		if (T.node[w].data == y)
+		if (t.node[w].data == y)
 		{
-			w = T.node[w].parent; // 取得w的双亲结点下标
-			y = T.node[w].data;
-			cout << y << "\t";
+			w = t.node[w].parent;
+			y = t.node[w].data;
+			std::cout << y << "\t";
 		}
 		else
-			w = (w + 1) % T.n;
+		{
+			w = (w + 1) % t.n;
+		}
 	}
 	return true;
 }
 
-// 求孩子结点
-void getChildren(pTree &T, elementType x)
+void get_children(p_tree &t, char x)
 {
 	int i, w;
-	for (w = 0; w < T.n; w++) // 获取x在结点数组中的下标
+	for (w = 0; w < t.n; w++)
 	{
-		if (T.node[w].data == x)
+		if (t.node[w].data == x)
+		{
 			break;
+		}
 	}
-	if (w >= T.n) // x不在表中
-		return;
-	for (i = 0; i < T.n; i++)
+	if (w >= t.n)
 	{
-		if (T.node[i].parent == w) // 找到子结点，打印
-			cout << T.node[i].data << "\t";
+		return;
 	}
-	cout << endl;
+	for (i = 0; i < t.n; i++)
+	{
+		if (t.node[i].parent == w)
+		{
+			std::cout << t.node[i].data << "\t";
+		}
+	}
+	std::cout << std::endl;
 }
 
-// 先序遍历
-int firstChild(pTree &T, int v) // 搜索下标为v的结点的第一个孩子结点下标
+int first_child(p_tree &t, int v)
 {
 	int w;
 	if (v == -1)
+	{
 		return -1;
+	}
 
-	for (w = 0; w < T.n; w++)
+	for (w = 0; w < t.n; w++)
 	{
-		if (T.node[w].parent == v)
+		if (t.node[w].parent == v)
+		{
 			return w;
+		}
 	}
 	return -1;
 }
-int nextSibling(pTree &T, int v, int w) // 搜索v的下标位于w之后的下一个孩子结点下标
+
+int next_sibling(p_tree &t, int v, int w)
 {
 	int i;
-	for (i = w + 1; i < T.n; i++)
-		if (T.node[i].parent == v)
+	for (i = w + 1; i < t.n; i++)
+	{
+		if (t.node[i].parent == v)
+		{
 			return i;
+		}
+	}
 	return -1;
 }
-void preOrder(pTree &T, int v)
+
+void pre_order(p_tree &t, int v)
 {
 	int w;
-	cout << T.node[v].data << "\t";
+	std::cout << t.node[v].data << "\t";
 
-	w = firstChild(T, v);
+	w = first_child(t, v);
 	while (w != -1)
 	{
-
-		preOrder(T, w);
-		w = nextSibling(T, v, w);
+		pre_order(t, w);
+		w = next_sibling(t, v, w);
 	}
 }
 
-void preTraverse(pTree &T)
+void pre_traverse(p_tree &t)
 {
 	int i;
-	int visited[MAXLEN];
-	for (i = 0; i < T.n; i++)
+	for (i = 0; i < t.n; i++)
 	{
-		visited[i] = 0;
-	}
-	// 搜索根结点，可能是森林，有多个根结点
-	for (i = 0; i < T.n; i++)
-	{
-		if (T.node[i].parent == -1)
-			preOrder(T, i);
+		if (t.node[i].parent == -1)
+		{
+			pre_order(t, i);
+		}
 	}
 }
 
-void postOrder(pTree &T, int v)
+void post_order(p_tree &t, int v)
 {
 	int w;
-	w = firstChild(T, v);
+	w = first_child(t, v);
 	while (w != -1)
 	{
-		postOrder(T, w);
-		w = nextSibling(T, v, w);
+		post_order(t, w);
+		w = next_sibling(t, v, w);
 	}
-	cout << T.node[v].data << "\t"; // 访问根结点
+	std::cout << t.node[v].data << "\t";
 }
 
-void postTraverse(pTree &T)
+void post_traverse(p_tree &t)
 {
 	int i;
-	int visited[MAXLEN];
-	for (i = 0; i < T.n; i++)
+	for (i = 0; i < t.n; i++)
 	{
-		visited[i] = 0;
-	}
-	// 搜索根结点，可能是森林，有多个根结点
-	for (i = 0; i < T.n; i++)
-	{
-		if (T.node[i].parent == -1)
-			postOrder(T, i);
+		if (t.node[i].parent == -1)
+		{
+			post_order(t, i);
+		}
 	}
 }
 
-// 打印树
-void printTree(pTree &T)
+void print_tree(p_tree &t)
 {
 	int i;
-	cout << "下标\t结点\t双亲" << endl;
-	for (i = 0; i < T.n; i++)
-		cout << i << "\t" << T.node[i].data << "\t" << T.node[i].parent << endl;
+	std::cout << "下标\t结点\t双亲" << std::endl;
+	for (i = 0; i < t.n; i++)
+	{
+		std::cout << i << "\t" << t.node[i].data << "\t" << t.node[i].parent << std::endl;
+	}
 }
 
-// 双亲表示定义、算法结束---------------------------------------------------------------
-
-// 孩子兄弟链表表示定义、创建算法开始---------------------------------------------------
-// 树（森林）的孩子兄弟链表表示
-typedef char elementType;
-
-typedef struct csNode
-{
-	elementType data;
-	struct csNode *firstChild, *nextSibling;
-} csNode, *csTree;
-
-// 删除字符串、字符数组左边空格
-void strLTrim(char *str)
+void str_l_trim(char *str)
 {
 	int i, j;
 	int n = 0;
-	n = strlen(str) + 1;
+	n = (int)std::strlen(str) + 1;
 	for (i = 0; i < n; i++)
 	{
-		if (str[i] != ' ') // 找到左起第一个非空格位置
+		if (str[i] != ' ')
+		{
 			break;
+		}
 	}
-	// 以第一个非空格字符为手字符移动字符串
 	for (j = 0; j < n; j++)
 	{
 		str[j] = str[i];
@@ -198,181 +257,183 @@ void strLTrim(char *str)
 	}
 }
 
-//****************** 文件创建双亲表示的树（森林）********************//
-//* 函数功能：从文本文件创建双亲表示的图                            *//
-//* 入口参数  char fileName[]，数据文件名                           *//
-//* 出口参数：pTree &T，即创建的树                                  *//
-//* 返 回 值：bool，true创建成功；false创建失败                     *//
-//* 函 数 名：CreateTreeFromFile(char fileName[], pTree &T)         *//
-//* 备注：本函数使用的数据文件格式以边（父子对）为基本数据          *//
-//*******************************************************************//
-int CreateTreeFromFile(char fileName[], pTree &T)
+int create_tree_from_file(char file_name[], p_tree &t)
 {
-	FILE *pFile;	  // 定义顺序表的文件指针
-	char str[1000];	  // 存放读出一行文本的字符串
-	char strTemp[10]; // 判断是否注释行
+	std::FILE *p_file;
+	char str[1000];
+	char str_temp[10];
 
 	int i = 0, j = 0;
 
-	pFile = fopen(fileName, "r");
-	if (!pFile)
+	p_file = std::fopen(file_name, "r");
+	if (!p_file)
 	{
-		printf("错误：文件%s打开失败。\n", fileName);
+		std::printf("错误：文件%s打开失败。\n", file_name);
 		return false;
 	}
 
-	while (fgets(str, 1000, pFile) != NULL) // 跳过空行和注释行
+	while (std::fgets(str, 1000, p_file) != NULL)
 	{
-		// 删除字符串左边空格
-		strLTrim(str);
-		if (str[0] == '\n') // 空行，继续读取下一行
+		str_l_trim(str);
+		if (str[0] == '\n')
+		{
 			continue;
+		}
 
-		strncpy(strTemp, str, 2);
-		if (strstr(strTemp, "//") != NULL) // 跳过注释行
+		std::strncpy(str_temp, str, 2);
+		if (std::strstr(str_temp, "//") != NULL)
+		{
 			continue;
-		else // 非注释行、非空行，跳出循环
+		}
+		else
+		{
 			break;
+		}
 	}
 
-	// 循环结束，str中应该已经是文件标识，判断文件格式
-	if (strstr(str, "Tree or Forest") == NULL)
+	if (std::strstr(str, "Tree or Forest") == NULL)
 	{
-		printf("错误：打开的文件格式错误！\n");
-		fclose(pFile); // 关闭文件
+		std::printf("错误：打开的文件格式错误！\n");
+		std::fclose(p_file);
 		return false;
 	}
 
-	// 读取结点数据，到str。跳过空行
-	while (fgets(str, 1000, pFile) != NULL)
+	while (std::fgets(str, 1000, p_file) != NULL)
 	{
-		// 删除字符串左边空格
-		strLTrim(str);
-		if (str[0] == '\n') // 空行，继续读取下一行
+		str_l_trim(str);
+		if (str[0] == '\n')
+		{
 			continue;
+		}
 
-		strncpy(strTemp, str, 2);
-		if (strstr(strTemp, "//") != NULL) // 注释行，跳过，继续读取下一行
+		std::strncpy(str_temp, str, 2);
+		if (std::strstr(str_temp, "//") != NULL)
+		{
 			continue;
-		else // 非空行，也非注释行，即图的顶点元素行
+		}
+		else
+		{
 			break;
+		}
 	}
 
-	// 结点数据存入树的结点数组
-	char *token = strtok(str, " ");
-	int nNum = 0;
+	char *token = std::strtok(str, " ");
+	int n_num = 0;
 	while (token != NULL)
 	{
-		T.node[nNum].data = *token;
-		T.node[nNum].parent = -1; // 父结点指针初始化为-1
-
-		token = strtok(NULL, " ");
-
-		nNum++;
+		t.node[n_num].data = *token;
+		t.node[n_num].parent = -1;
+		token = std::strtok(NULL, " ");
+		n_num++;
 	}
 
-	// 循环读取边（父子队）数据
-	int nP; // 父结点数组下标
-	int nC; // 子结点数组下标
+	int n_p;
+	int n_c;
+	char n_f, n_s;
 
-	elementType Nf, Ns; // 父子结点对的两个结点
-	while (fgets(str, 1000, pFile) != NULL)
+	while (std::fgets(str, 1000, p_file) != NULL)
 	{
-		// 删除字符串左边空格
-		strLTrim(str);
-		if (str[0] == '\n') // 空行，继续读取下一行
-			continue;
-
-		strncpy(strTemp, str, 2);
-		if (strstr(strTemp, "//") != NULL) // 注释行，跳过，继续读取下一行
-			continue;
-
-		char *token = strtok(str, " "); // 以空格为分隔符，分割一行数据，写入邻接矩阵
-
-		if (token == NULL) // 分割为空串，失败退出
+		str_l_trim(str);
+		if (str[0] == '\n')
 		{
-			printf("错误：读取树的边数据失败！\n");
-			fclose(pFile); // 关闭文件
+			continue;
+		}
+
+		std::strncpy(str_temp, str, 2);
+		if (std::strstr(str_temp, "//") != NULL)
+		{
+			continue;
+		}
+
+		char *token = std::strtok(str, " ");
+
+		if (token == NULL)
+		{
+			std::printf("错误：读取树的边数据失败！\n");
+			std::fclose(p_file);
 			return false;
 		}
-		Nf = *token; // 获取父结点
+		n_f = *token;
 
-		token = strtok(NULL, " "); // 读取下一个子串，即子结点
-		if (token == NULL)		   // 分割为空串，失败退出
+		token = std::strtok(NULL, " ");
+		if (token == NULL)
 		{
-			printf("错误：读取树的边数据失败！\n");
-			fclose(pFile); // 关闭文件
+			std::printf("错误：读取树的边数据失败！\n");
+			std::fclose(p_file);
 			return false;
 		}
+		n_s = *token;
 
-		Ns = *token; // 获取边的第二个结点（子结点）
-					 // 取得父结点下标
-		for (nP = 0; nP < nNum; nP++)
+		for (n_p = 0; n_p < n_num; n_p++)
 		{
-			if (T.node[nP].data == Nf) // 从顶点列表找到第一个顶点的编号
+			if (t.node[n_p].data == n_f)
+			{
 				break;
+			}
 		}
-		// 获取子结点的数组下标
-		for (nC = 0; nC < nNum; nC++)
+		for (n_c = 0; n_c < n_num; n_c++)
 		{
-			if (T.node[nC].data == Ns) // 从顶点列表找到第二个顶点的编号
+			if (t.node[n_c].data == n_s)
+			{
 				break;
+			}
 		}
 
-		T.node[nC].parent = nP; // nC的父结点的下标为nP
+		t.node[n_c].parent = n_p;
 	}
 
-	T.n = nNum; // 树的结点数，即顶点数组的实际大小
-
-	fclose(pFile); // 关闭文件
+	t.n = n_num;
+	std::fclose(p_file);
 	return true;
 }
 
-// 搜索双亲表示中，下标w的下一个兄弟结点，返回兄弟结点的下标
-int next(pTree T, int w)
+int next_node(p_tree t, int w)
 {
 	int i;
-	for (i = w + 1; i < T.n; i++)
+	for (i = w + 1; i < t.n; i++)
 	{
-		if (T.node[w].parent == T.node[i].parent)
+		if (t.node[w].parent == t.node[i].parent)
+		{
 			return i;
+		}
 	}
 	return -1;
 }
 
-// 递归创建一棵孩子兄弟链表表示的树
-void create(csNode *&T, pTree &T1, int v)
+void create_cs_tree_recursive(cs_node *&t, p_tree &t1, int v)
 {
 	int w;
-	T = new csNode;
-	T->data = T1.node[v].data;
-	T->firstChild = NULL;
-	T->nextSibling = NULL;
-	w = firstChild(T1, v); // 搜索v的第一个孩子结点
+	t = new cs_node;
+	t->data = t1.node[v].data;
+	t->first_child = NULL;
+	t->next_sibling = NULL;
+	w = first_child(t1, v);
 	if (w != -1)
 	{
-		create(T->firstChild, T1, w);
+		create_cs_tree_recursive(t->first_child, t1, w);
 	}
 
-	w = next(T1, v); // 搜索v的下一个兄弟结点
+	w = next_node(t1, v);
 	if (w != -1)
 	{
-		create(T->nextSibling, T1, w);
+		create_cs_tree_recursive(t->next_sibling, t1, w);
 	}
 }
 
-// 从双亲表示的树（森林）创建孩子兄弟链表表示的树（森林）
-void createCsTree(csNode *&T, pTree T1)
+void create_cs_tree(cs_node *&t, p_tree t1)
 {
 	int i;
-	// 搜索T1的第一个根结点
-	for (i = 0; i < T1.n; i++)
+	for (i = 0; i < t1.n; i++)
 	{
-		if (T1.node[i].parent == -1) // 找到第一个根结点
+		if (t1.node[i].parent == -1)
+		{
 			break;
+		}
 	}
-	if (i < T1.n)
-		create(T, T1, i);
+	if (i < t1.n)
+	{
+		create_cs_tree_recursive(t, t1, i);
+	}
 }
 
-// 孩子兄弟链表表示定义、创建算法结束---------------------------------------------------
+#endif
