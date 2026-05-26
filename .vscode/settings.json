@@ -1,6 +1,9 @@
 {
     "C_Cpp.default.cppStandard": "c++20",
-    "C_Cpp.default.includePath": ["${workspaceFolder}/inc/**"],
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/inc/**"
+    ],
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 120 }",
     "files.associations": {
         "*.h": "cpp",
         "*.hpp": "cpp"
@@ -24,7 +27,5 @@
     "[cpp]": {
         "editor.defaultFormatter": "ms-vscode.cpptools",
         "editor.formatOnSave": true
-    },
-    "prettier.requireConfig": false,
-    "prettier.enableDebugLogs": true
+    }
 }

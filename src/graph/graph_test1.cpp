@@ -1,4 +1,4 @@
- #include "createGrpAdjLinkedList.h"
+#include "createGrpAdjLinkedList.h"
 // #include "createGrpAdjMatrix.h"
 #include <string>
 #include <iostream>
@@ -9,17 +9,18 @@ char cwd[1024];
 
 int main()
 {
-    _getcwd(cwd,sizeof(cwd));
+    _getcwd(cwd, sizeof(cwd));
     std::string data_dir_path = std::string(cwd) + "/../src/graph/grpData/";
     std::string data_name = "udg8.grp";
     std::string data_path_str = data_dir_path + data_name;
-    char * data_path = new char[data_path_str.size()+1];
+    char *data_path = new char[data_path_str.size() + 1];
     // std::strncpy(data_path,data_path_str.c_str(),sizeof(data_path)-1);
-    std::strcpy(data_path,data_path_str.c_str());
+    std::strcpy(data_path, data_path_str.c_str());
     Graph g;
-    if( CreateGraphFromFile(data_path,g))
+    if (CreateGraphFromFile(data_path, g))
     {
-        std::cout << g.ArcNum;
+        std::cout << data_path_str << std::endl;
+        // std::cout << g.ArcNum;
     }
     else
     {

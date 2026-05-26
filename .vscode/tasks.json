@@ -2,31 +2,33 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Ensure Bin Directory",
+            "type": "shell",
+            "command": "mkdir",
+            "args": [
+                "-p",
+                "${workspaceFolder}/bin"
+            ],
+            "problemMatcher": []
+        },
+        {
             "label": "Build Active File",
             "type": "shell",
             "command": "g++",
             "args": [
-                "${file}",
-                "-o",
-                "${workspaceFolder}/bin/${fileBasenameNoExtension}",
-                "-I",
-                "${workspaceFolder}/inc/",
                 "-std=c++20",
                 "-Wall",
-                "-g"
+                "-g",
+                "${file}",
+                "-o",
+                "${workspaceFolder}/bin/${fileBasenameNoExtension}.exe"
             ],
             "windows": {
-                "args": [
-                    "${file}",
-                    "-o",
-                    "${workspaceFolder}/bin/${fileBasenameNoExtension}.exe",
-                    "-I",
-                    "${workspaceFolder}/inc/",
-                    "-std=c++20",
-                    "-Wall",
-                    "-g"
-                ]
+                "command": "C:/Program Files/mingw64/bin/g++.exe"
             },
+            "dependsOn": [
+                "Ensure Bin Directory"
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true

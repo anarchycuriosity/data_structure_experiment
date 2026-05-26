@@ -7,7 +7,6 @@
 #include <vector>
 #include <stack>
 char cwd[1024];
-int a = 1 + 1;
 const int max_size = 100;
 bool visited[max_size]; // 放全局默认为false
 // 基于节点，而不是边，所以用一维数组而不是二维
@@ -33,19 +32,30 @@ bool path_e(Graph g, elementType start, elementType end)
             end_ind = i;
         }
     }
-    for (int i = 1; i <= 26; i++)
-    {
-        if (g.AdjMatrix[start_ind][i] == true)
-        {
-            st.push({start_ind});
-        }
-    }
-    cellType ind1 = start_ind; // 一定要记得初始化
+    // 一定要记得先初始化栈，先压点什么东西
+    st.push(start_ind);
     while (!st.empty())
     {
         cellType curr = st.top();
         st.pop();
+        if (visited[curr] == true)
+        {
+            continue;
+        }
+        visited[curr] = true;
+        if (curr == end_ind)
+        {
+            return true;
+        }
+        for (int next = 1; next <= 26; next++)
+        {
+            if (g.AdjMatrix[curr][next] == true && visited[next] == false) // 判断可以去到下一个节点并且下一个节点没有被推入栈过
+            {
+                st.push(next);
+            }
+        }
     }
+    return false;
     // while (!st.empty())
     // {
     //     edge = st.top();
