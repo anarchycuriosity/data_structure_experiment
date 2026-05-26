@@ -2,16 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Active File (mingw64)",
+            "name": "Debug Active File (GDB)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/${fileBasenameNoExtension}.exe",
+            "program": "${workspaceFolder}/bin/${fileBasenameNoExtension}",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/bin/",
             "environment": [],
+            "externalConsole": false,
             "MIMode": "gdb",
-            "preLaunchTask": "Build Active File"
+            "preLaunchTask": "Build Active File",
+            "windows": {
+                "program": "${workspaceFolder}/bin/${fileBasenameNoExtension}.exe"
+            }
         }
     ]
 }

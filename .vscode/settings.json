@@ -1,17 +1,10 @@
-// {
-//     {
-//   "editor.defaultFormatter": "esbenp.prettier-vscode",
-
-//   "editor.formatOnSave": true,
-
-//   "[javascript]": {
-//     "editor.defaultFormatter": "esbenp.prettier-vscode"
-//   },
-//   "[typescript]": {
-//     "editor.defaultFormatter": "esbenp.prettier-vscode"
-//   },
-//   "[json]": {
-//     "editor.defaultFormatter": "esbenp.prettier-vscode"
-//   }
-// }
-// }
+{
+    "C_Cpp.default.cppStandard": "c++20",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/inc/**"
+    ],
+    "files.associations": {
+        "*.h": "cpp",
+        "*.hpp": "cpp"
+    }
+}
