@@ -1,5 +1,5 @@
-// #include "createGrpAdjLinkedList.h"
-#include "createGrpAdjMatrix.h"
+ #include "createGrpAdjLinkedList.h"
+// #include "createGrpAdjMatrix.h"
 #include <string>
 #include <iostream>
 #include <direct.h>
@@ -17,14 +17,12 @@ int main()
     // std::strncpy(data_path,data_path_str.c_str(),sizeof(data_path)-1);
     std::strcpy(data_path,data_path_str.c_str());
     Graph g;
-    if( CreateGrpFromFile(data_path,g))
+    if( CreateGraphFromFile(data_path,g))
     {
         std::cout << g.ArcNum;
     }
     else
     {
         std::cout << "create:fail" << "\n";
-        std::cout << data_path << std::endl;
-        std::cout << "你好";
     };
 }
