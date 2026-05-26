@@ -1,9 +1,15 @@
 {
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "terminal.integrated.profiles.windows": {
+        "Git Bash": {
+            "path": "C:\\Program Files\\Git\\bin\\bash.exe",
+            "args": ["--login"]
+        }
+    },
     "C_Cpp.default.cppStandard": "c++20",
     "C_Cpp.default.includePath": [
         "${workspaceFolder}/inc/**"
     ],
-    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 120 }",
     "files.associations": {
         "*.h": "cpp",
         "*.hpp": "cpp"
