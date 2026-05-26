@@ -14,7 +14,8 @@ int main()
     std::string data_name = "udg8.grp";
     std::string data_path_str = data_dir_path + data_name;
     char * data_path = new char[data_path_str.size()+1];
-    std::strncpy(data_path,data_path_str.c_str(),sizeof(data_path)-1);
+    // std::strncpy(data_path,data_path_str.c_str(),sizeof(data_path)-1);
+    std::strcpy(data_path,data_path_str.c_str());
     Graph g;
     if( CreateGrpFromFile(data_path,g))
     {

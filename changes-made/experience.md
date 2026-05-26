@@ -9,6 +9,7 @@
 | 编号 | 文档 | 关键词 | 摘要 |
 |------|------|--------|------|
 | 01 | [01-vscode-cross-platform-config](01-vscode-cross-platform-config.md) | VS Code, 跨平台, 工作区配置, GDB | VS Code 工作区配置文件（tasks/launch/settings）的平台兼容性修复：利用 `windows`/`linux` 属性覆盖机制消除硬编码的平台依赖 |
+| 02 | [02-vscode-f5-debug-fix](02-vscode-f5-debug-fix.md) | VS Code, F5, cppdbg, miDebuggerPath, GDB | F5 编译运行失败的诊断与修复：cppdbg 扩展在 Windows 上需要显式指定 miDebuggerPath 才能找到 MinGW GDB |
 
 ---
 

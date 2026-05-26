@@ -14,7 +14,11 @@
             "MIMode": "gdb",
             "preLaunchTask": "Build Active File",
             "windows": {
-                "program": "${workspaceFolder}/bin/${fileBasenameNoExtension}.exe"
+                "program": "${workspaceFolder}/bin/${fileBasenameNoExtension}.exe",
+                "miDebuggerPath": "C:/Program Files/mingw64/bin/gdb.exe"
+            },
+            "linux": {
+                "miDebuggerPath": "/usr/bin/gdb"
             }
         }
     ]
