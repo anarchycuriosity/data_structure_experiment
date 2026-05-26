@@ -75,7 +75,8 @@ int main()
 {
     _getcwd(cwd, sizeof(cwd));
     std::string data_dir_path = std::string(cwd) + "/../src/graph/grpData/";
-    std::string data_name = "dg6.grp";
+    // std::string data_name = "dg6.grp";
+    std::string data_name = "dgTree7.grp";
     std::string data_path_str = data_dir_path + data_name;
     char* data_path = new char[data_path_str.size() + 1];
     // std::strncpy(data_path,data_path_str.c_str(),sizeof(data_path)-1);
@@ -83,13 +84,13 @@ int main()
     Graph g;
     if (CreateGraphFromFile(data_path, g))
     {
-        if (judge(g, 'a'))
+        if (judge(g, 'a'))  // f是根就对了
         {
-            std::cout << "有根有向";
+            std::cout << "有根有向树";
         }
         else
         {
-            std::cout << "不是";
+            std::cout << "不是有根有向树";
         }
     }
     else
